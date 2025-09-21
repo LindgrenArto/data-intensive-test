@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="b2475abc-981d-4dea-a109-2428df248824" ChangeDateTime="09/21/2025 06:37:10">
+    <Property Name="ElementName" Value="[dbo].[Site].[Location]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Site]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="City" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1c325070-bb0b-4640-b2ed-d71de76cefbf" ChangeDateTime="09/21/2025 06:37:14">
+    <Property Name="ElementName" Value="[dbo].[Customer].[Location]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Customer]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="City" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="78112a5f-1e7b-4093-9e6d-95cf1c65a519" ChangeDateTime="09/21/2025 06:37:42">
+    <Property Name="ElementName" Value="[dbo].[Device].[CustomerUuid]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Device]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SIteUuid" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1178d490-d902-48a7-83c0-adf21159267f" ChangeDateTime="09/21/2025 06:38:42">
+    <Property Name="ElementName" Value="[dbo].[User].[CustomerUuid]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[User]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SiteUuid" />
+  </Operation>
+</Operations>
