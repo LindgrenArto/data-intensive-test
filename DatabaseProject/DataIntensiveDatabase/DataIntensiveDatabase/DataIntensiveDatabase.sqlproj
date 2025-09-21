@@ -57,6 +57,7 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Customer.sql" />
@@ -64,8 +65,19 @@
     <Build Include="Tables\User.sql" />
     <Build Include="Tables\Device.sql" />
     <Build Include="Tables\Measurement.sql" />
+    <Build Include="Tables\SiteUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DataIntensiveDatabase.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\ScriptCreateData.sql" />
+    <None Include="Scripts\ScriptResetData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Scripts\Script.PreDeployment1.sql" />
   </ItemGroup>
 </Project>
