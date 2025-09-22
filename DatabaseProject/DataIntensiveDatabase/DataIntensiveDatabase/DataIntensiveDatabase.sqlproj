@@ -58,6 +58,7 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
     <Folder Include="Scripts" />
+    <Folder Include="Publish\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Customer.sql" />
@@ -76,8 +77,18 @@
   <ItemGroup>
     <None Include="Scripts\ScriptCreateData.sql" />
     <None Include="Scripts\ScriptResetData.sql" />
+    <None Include="DataIntensiveDatabase.publish.xml" />
+    <None Include="Publish\DataIntensiveDatabase.publish.xml" />
+    <None Include="Publish\DataIntensiveDatabase2.publish.publish.xml" />
+    <None Include="Publish\DataIntensiveDatabase3.publish.publish.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Script.PreDeployment1.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="EnvTag">
+      <DefaultValue>
+      </DefaultValue>
+    </SqlCmdVariable>
   </ItemGroup>
 </Project>

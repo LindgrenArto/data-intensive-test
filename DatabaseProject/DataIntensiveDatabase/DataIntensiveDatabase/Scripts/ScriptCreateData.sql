@@ -4,118 +4,168 @@ SET XACT_ABORT ON;
 BEGIN TRY
     BEGIN TRAN;
 
+    DECLARE @EnvTag nvarchar(16) = '$(EnvTag)';
+    IF NULLIF(@EnvTag,'') IS NULL
+        SELECT @EnvTag = UPPER(SUBSTRING(master.dbo.fn_varbintohexstr(HASHBYTES('SHA1', DB_NAME())), 3, 4));
+
+    -------------------------
+    -- Build temp datasets --
+    -------------------------
+    IF OBJECT_ID('tempdb..#nums') IS NOT NULL DROP TABLE #nums;
+    SELECT n INTO #nums
+    FROM (VALUES (1),(2),(3),(4),(5),(6),(7),(8),(9),(10)) v(n);
+
+    -- common 1..5
+    IF OBJECT_ID('tempdb..#c_cust') IS NOT NULL DROP TABLE #c_cust;
+    SELECT
+        CustomerUuid = CONCAT('CUST', REPLICATE('0', 24-4-3), RIGHT('00'+CAST(n AS varchar(3)),3)),
+        Name = CONCAT('Customer ', n),
+        City = CHOOSE(n,'Helsinki','Espoo','Vantaa','Tampere','Oulu','Turku','Lahti','Kuopio','Jyväskylä','Joensuu')
+    INTO #c_cust
+    FROM #nums WHERE n <= 5;
+
+    IF OBJECT_ID('tempdb..#c_site') IS NOT NULL DROP TABLE #c_site;
+    SELECT
+        SiteUuid = CONCAT('SITE', REPLICATE('0', 24-4-3), RIGHT('00'+CAST(n AS varchar(3)),3)),
+        Name = CONCAT('Site ', n),
+        City = CHOOSE(n,'Helsinki','Espoo','Vantaa','Tampere','Oulu','Turku','Lahti','Kuopio','Jyväskylä','Joensuu'),
+        CustomerUuid = CONCAT('CUST', REPLICATE('0', 24-4-3), RIGHT('00'+CAST(n AS varchar(3)),3))
+    INTO #c_site
+    FROM #nums WHERE n <= 5;
+
+    IF OBJECT_ID('tempdb..#c_dev') IS NOT NULL DROP TABLE #c_dev;
+    SELECT
+        DeviceUuid = CONCAT('DEV', REPLICATE('0', 24-3-3), RIGHT('00'+CAST(n AS varchar(3)),3)),
+        Name = CONCAT('Device ', n),
+        Location = CONCAT('Floor ', n),
+        SiteUuid = CONCAT('SITE', REPLICATE('0', 24-4-3), RIGHT('00'+CAST(n AS varchar(3)),3))
+    INTO #c_dev
+    FROM #nums WHERE n <= 5;
+
+    IF OBJECT_ID('tempdb..#c_usr') IS NOT NULL DROP TABLE #c_usr;
+    SELECT
+        UserUuid = CONCAT('USR', REPLICATE('0', 24-3-3), RIGHT('00'+CAST(n AS varchar(3)),3)),
+        Name = CONCAT('User ', n),
+        Location = 'Ops'
+    INTO #c_usr
+    FROM #nums WHERE n <= 5;
+
+    IF OBJECT_ID('tempdb..#c_mea') IS NOT NULL DROP TABLE #c_mea;
+    SELECT
+        MeasurementUuid = CONCAT('MEA', REPLICATE('0', 24-3-3), RIGHT('00'+CAST(n AS varchar(3)),3)),
+        Name = CONCAT('Sensor ', n),
+        Location = CONCAT('Room ', n),
+        DeviceUuid = CONCAT('DEV', REPLICATE('0', 24-3-3), RIGHT('00'+CAST(n AS varchar(3)),3)),
+        Measurement = CAST(20.0 + (n*0.3) AS decimal(4,1))
+    INTO #c_mea
+    FROM #nums WHERE n <= 5;
+
+
+    IF OBJECT_ID('tempdb..#e_ids') IS NOT NULL DROP TABLE #e_ids;
+    SELECT
+        n,
+        cust = CONCAT('CUST', @EnvTag, REPLICATE('0', 24 - LEN('CUST') - LEN(@EnvTag) - 3), RIGHT('00'+CAST(n AS varchar(3)),3)),
+        site = CONCAT('SITE', @EnvTag, REPLICATE('0', 24 - LEN('SITE') - LEN(@EnvTag) - 3), RIGHT('00'+CAST(n AS varchar(3)),3)),
+        dev  = CONCAT('DEV',  @EnvTag, REPLICATE('0', 24 - LEN('DEV')  - LEN(@EnvTag) - 3), RIGHT('00'+CAST(n AS varchar(3)),3)),
+        usr  = CONCAT('USR',  @EnvTag, REPLICATE('0', 24 - LEN('USR')  - LEN(@EnvTag) - 3), RIGHT('00'+CAST(n AS varchar(3)),3)),
+        mea  = CONCAT('MEA',  @EnvTag, REPLICATE('0', 24 - LEN('MEA')  - LEN(@EnvTag) - 3), RIGHT('00'+CAST(n AS varchar(3)),3))
+    INTO #e_ids
+    FROM #nums WHERE n BETWEEN 6 AND 10;
+
+    IF OBJECT_ID('tempdb..#e_cust') IS NOT NULL DROP TABLE #e_cust;
+    SELECT CustomerUuid = cust, Name = CONCAT('Customer ', n), City = CONCAT('City ', n)
+    INTO #e_cust
+    FROM #e_ids;
+
+    IF OBJECT_ID('tempdb..#e_site') IS NOT NULL DROP TABLE #e_site;
+    SELECT SiteUuid = site, Name = CONCAT('Site ', n), City = CONCAT('City ', n), CustomerUuid = cust
+    INTO #e_site
+    FROM #e_ids;
+
+    IF OBJECT_ID('tempdb..#e_dev') IS NOT NULL DROP TABLE #e_dev;
+    SELECT DeviceUuid = dev, Name = CONCAT('Device ', n), Location = CONCAT('Floor ', n), SiteUuid = site
+    INTO #e_dev
+    FROM #e_ids;
+
+    IF OBJECT_ID('tempdb..#e_usr') IS NOT NULL DROP TABLE #e_usr;
+    SELECT UserUuid = usr, Name = CONCAT('User ', n), Location = 'Ops'
+    INTO #e_usr
+    FROM #e_ids;
+
+    IF OBJECT_ID('tempdb..#e_mea') IS NOT NULL DROP TABLE #e_mea;
+    SELECT MeasurementUuid = mea, Name = CONCAT('Sensor ', n), Location = CONCAT('Room ', n),
+           DeviceUuid = dev, Measurement = CAST(20.0 + (n*0.3) AS decimal(4,1))
+    INTO #e_mea
+    FROM #e_ids;
+
+    ------------------------
+    -- Seed with IF blocks --
+    ------------------------
+
     -- Customers
     IF NOT EXISTS (SELECT 1 FROM dbo.Customer)
     BEGIN
-        ;WITH src(CustomerUuid, Name, City) AS
-        (
-            SELECT 'CUST000000000000000001','Customer 1','Helsinki'  UNION ALL
-            SELECT 'CUST000000000000000002','Customer 2','Espoo'     UNION ALL
-            SELECT 'CUST000000000000000003','Customer 3','Vantaa'    UNION ALL
-            SELECT 'CUST000000000000000004','Customer 4','Tampere'   UNION ALL
-            SELECT 'CUST000000000000000005','Customer 5','Oulu'      UNION ALL
-            SELECT 'CUST000000000000000006','Customer 6','Turku'     UNION ALL
-            SELECT 'CUST000000000000000007','Customer 7','Lahti'     UNION ALL
-            SELECT 'CUST000000000000000008','Customer 8','Kuopio'    UNION ALL
-            SELECT 'CUST000000000000000009','Customer 9','Jyväskylä' UNION ALL
-            SELECT 'CUST000000000000000010','Customer 10','Joensuu'
-        )
         INSERT dbo.Customer (CustomerUuid, Name, City)
-        SELECT * FROM src;
+        SELECT CustomerUuid, Name, City FROM #c_cust
+        UNION ALL
+        SELECT CustomerUuid, Name, City FROM #e_cust;
     END
 
     -- Sites
     IF NOT EXISTS (SELECT 1 FROM dbo.Site)
     BEGIN
-        ;WITH src(SiteUuid, Name, City, CustomerUuid) AS
-        (
-            SELECT 'SITE000000000000000001','Site 1','Helsinki' , 'CUST000000000000000001' UNION ALL
-            SELECT 'SITE000000000000000002','Site 2','Espoo'    , 'CUST000000000000000002' UNION ALL
-            SELECT 'SITE000000000000000003','Site 3','Vantaa'   , 'CUST000000000000000003' UNION ALL
-            SELECT 'SITE000000000000000004','Site 4','Tampere'  , 'CUST000000000000000004' UNION ALL
-            SELECT 'SITE000000000000000005','Site 5','Oulu'     , 'CUST000000000000000005' UNION ALL
-            SELECT 'SITE000000000000000006','Site 6','Turku'    , 'CUST000000000000000006' UNION ALL
-            SELECT 'SITE000000000000000007','Site 7','Lahti'    , 'CUST000000000000000007' UNION ALL
-            SELECT 'SITE000000000000000008','Site 8','Kuopio'   , 'CUST000000000000000008' UNION ALL
-            SELECT 'SITE000000000000000009','Site 9','Jyväskylä', 'CUST000000000000000009' UNION ALL
-            SELECT 'SITE000000000000000010','Site 10','Joensuu' , 'CUST000000000000000010'
-        )
         INSERT dbo.Site (SiteUuid, Name, City, CustomerUuid)
-        SELECT * FROM src;
+        SELECT SiteUuid, Name, City, CustomerUuid FROM #c_site
+        UNION ALL
+        SELECT SiteUuid, Name, City, CustomerUuid FROM #e_site;
     END
 
     -- Devices
     IF NOT EXISTS (SELECT 1 FROM dbo.Device)
     BEGIN
-        ;WITH src(DeviceUuid, Name, Location, SiteUuid) AS
-        (
-            SELECT 'DEV000000000000000001','Device 1','Floor 1',  'SITE000000000000000001' UNION ALL
-            SELECT 'DEV000000000000000002','Device 2','Floor 2',  'SITE000000000000000002' UNION ALL
-            SELECT 'DEV000000000000000003','Device 3','Floor 3',  'SITE000000000000000003' UNION ALL
-            SELECT 'DEV000000000000000004','Device 4','Floor 4',  'SITE000000000000000004' UNION ALL
-            SELECT 'DEV000000000000000005','Device 5','Floor 5',  'SITE000000000000000005' UNION ALL
-            SELECT 'DEV000000000000000006','Device 6','Floor 6',  'SITE000000000000000006' UNION ALL
-            SELECT 'DEV000000000000000007','Device 7','Floor 7',  'SITE000000000000000007' UNION ALL
-            SELECT 'DEV000000000000000008','Device 8','Floor 8',  'SITE000000000000000008' UNION ALL
-            SELECT 'DEV000000000000000009','Device 9','Floor 9',  'SITE000000000000000009' UNION ALL
-            SELECT 'DEV000000000000000010','Device 10','Floor 10','SITE000000000000000010'
-        )
         INSERT dbo.Device (DeviceUuid, Name, Location, SiteUuid)
-        SELECT * FROM src;
+        SELECT DeviceUuid, Name, Location, SiteUuid FROM #c_dev
+        UNION ALL
+        SELECT DeviceUuid, Name, Location, SiteUuid FROM #e_dev;
     END
 
     -- Users
     IF NOT EXISTS (SELECT 1 FROM dbo.[User])
     BEGIN
-        ;WITH src(UserUuid, Name, Location) AS
-        (
-            SELECT 'USR000000000000000001','User 1','Ops' UNION ALL
-            SELECT 'USR000000000000000002','User 2','Ops' UNION ALL
-            SELECT 'USR000000000000000003','User 3','Ops' UNION ALL
-            SELECT 'USR000000000000000004','User 4','Ops' UNION ALL
-            SELECT 'USR000000000000000005','User 5','Ops' UNION ALL
-            SELECT 'USR000000000000000006','User 6','Ops' UNION ALL
-            SELECT 'USR000000000000000007','User 7','Ops' UNION ALL
-            SELECT 'USR000000000000000008','User 8','Ops' UNION ALL
-            SELECT 'USR000000000000000009','User 9','Ops' UNION ALL
-            SELECT 'USR000000000000000010','User 10','Ops'
-        )
         INSERT dbo.[User] (UserUuid, Name, Location)
-        SELECT * FROM src;
+        SELECT UserUuid, Name, Location FROM #c_usr
+        UNION ALL
+        SELECT UserUuid, Name, Location FROM #e_usr;
     END
 
     -- Measurements
     IF NOT EXISTS (SELECT 1 FROM dbo.Measurement)
     BEGIN
-        ;WITH src(MeasurementUuid, Name, Location, DeviceUuid, Measurement) AS
-        (
-            SELECT 'MEA000000000000000001','Sensor 1','Room 1','DEV000000000000000001',20.5 UNION ALL
-            SELECT 'MEA000000000000000002','Sensor 2','Room 2','DEV000000000000000002',21.1 UNION ALL
-            SELECT 'MEA000000000000000003','Sensor 3','Room 3','DEV000000000000000003',19.8 UNION ALL
-            SELECT 'MEA000000000000000004','Sensor 4','Room 4','DEV000000000000000004',22.2 UNION ALL
-            SELECT 'MEA000000000000000005','Sensor 5','Room 5','DEV000000000000000005',23.0 UNION ALL
-            SELECT 'MEA000000000000000006','Sensor 6','Room 6','DEV000000000000000006',18.9 UNION ALL
-            SELECT 'MEA000000000000000007','Sensor 7','Room 7','DEV000000000000000007',21.7 UNION ALL
-            SELECT 'MEA000000000000000008','Sensor 8','Room 8','DEV000000000000000008',20.9 UNION ALL
-            SELECT 'MEA000000000000000009','Sensor 9','Room 9','DEV000000000000000009',19.6 UNION ALL
-            SELECT 'MEA000000000000000010','Sensor 10','Room 10','DEV000000000000000010',22.0
-        )
         INSERT dbo.Measurement (MeasurementUuid, Name, Location, DeviceUuid, Measurement)
-        SELECT * FROM src;
+        SELECT MeasurementUuid, Name, Location, DeviceUuid, Measurement FROM #c_mea
+        UNION ALL
+        SELECT MeasurementUuid, Name, Location, DeviceUuid, Measurement FROM #e_mea;
     END
 
-    -- SiteUser links
+    -- SiteUser links: 2 per user (common→common, env→env)
     IF NOT EXISTS (SELECT 1 FROM dbo.SiteUser)
     BEGIN
-        ;WITH u AS (SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS rn, UserUuid FROM dbo.[User]),
-              s AS (SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS rn, SiteUuid FROM dbo.Site),
-              pairs AS
-        (
-            SELECT u.UserUuid, s1.SiteUuid
-            FROM u JOIN s s1 ON s1.rn = u.rn
+        ;WITH cu AS (
+            SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) rn, UserUuid FROM #c_usr
+        ), cs AS (
+            SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) rn, SiteUuid FROM #c_site
+        ), eu AS (
+            SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) rn, UserUuid FROM #e_usr
+        ), es AS (
+            SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) rn, SiteUuid FROM #e_site
+        ), pairs AS (
+            SELECT cu.UserUuid, cs.SiteUuid FROM cu JOIN cs ON cs.rn = cu.rn
             UNION ALL
-            SELECT u.UserUuid, s2.SiteUuid
-            FROM u JOIN s s2 ON s2.rn = CASE WHEN u.rn=10 THEN 1 ELSE u.rn+1 END
+            SELECT cu.UserUuid, cs.SiteUuid FROM cu JOIN cs ON cs.rn = CASE WHEN cu.rn = 5 THEN 1 ELSE cu.rn + 1 END
+            UNION ALL
+            SELECT eu.UserUuid, es.SiteUuid FROM eu JOIN es ON es.rn = eu.rn
+            UNION ALL
+            SELECT eu.UserUuid, es.SiteUuid FROM eu JOIN es ON es.rn = CASE WHEN eu.rn = 5 THEN 1 ELSE eu.rn + 1 END
         )
         INSERT dbo.SiteUser (UserUuid, SiteUuid)
         SELECT UserUuid, SiteUuid FROM pairs;

@@ -1,12 +1,157 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\ScriptCreateData.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|solutionrelative:DataIntensiveDatabase\\Scripts\\ScriptCreateData.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\Script.PostDeployment1.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|solutionrelative:DataIntensiveDatabase\\Scripts\\Script.PostDeployment1.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_7.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_7.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\ScriptResetData.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|solutionrelative:DataIntensiveDatabase\\Scripts\\ScriptResetData.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_6.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_6.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_5.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_5.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\ScriptCreateData.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|solutionrelative:DataIntensiveDatabase\\Scripts\\ScriptCreateData.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_5.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_5.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_5.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|ResultFrame",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_5.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|ResultFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_6.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_6.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\ScriptResetData.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|solutionrelative:DataIntensiveDatabase\\Scripts\\ScriptResetData.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_7.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_7.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_7.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|ResultFrame",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_7.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|ResultFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\Script.PostDeployment1.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{8E917F66-6F58-42DD-8AEB-76E3231329BF}|DataIntensiveDatabase\\DataIntensiveDatabase.sqlproj|solutionrelative:DataIntensiveDatabase\\Scripts\\Script.PostDeployment1.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 1506,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Script.PostDeployment1.sql ",
+              "DocumentMoniker": "C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\Script.PostDeployment1.sql",
+              "RelativeDocumentMoniker": "DataIntensiveDatabase\\Scripts\\Script.PostDeployment1.sql",
+              "ToolTip": "C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\Script.PostDeployment1.sql",
+              "RelativeToolTip": "DataIntensiveDatabase\\Scripts\\Script.PostDeployment1.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-09-22T11:21:13.245Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DataIntensiveDatabase_7.publish.sql ",
+              "DocumentMoniker": "C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_7.publish.sql",
+              "RelativeDocumentMoniker": "DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_7.publish.sql",
+              "ToolTip": "DataIntensiveDatabase_7.publish.sql ",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-09-22T11:10:32.839Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ScriptResetData.sql ",
+              "DocumentMoniker": "C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\ScriptResetData.sql",
+              "RelativeDocumentMoniker": "DataIntensiveDatabase\\Scripts\\ScriptResetData.sql",
+              "ToolTip": "C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\ScriptResetData.sql",
+              "RelativeToolTip": "DataIntensiveDatabase\\Scripts\\ScriptResetData.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-09-22T11:10:09.193Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ScriptCreateData.sql ",
+              "DocumentMoniker": "C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\ScriptCreateData.sql",
+              "RelativeDocumentMoniker": "DataIntensiveDatabase\\Scripts\\ScriptCreateData.sql",
+              "ToolTip": "C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\Scripts\\ScriptCreateData.sql",
+              "RelativeToolTip": "DataIntensiveDatabase\\Scripts\\ScriptCreateData.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-09-22T11:04:52.09Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DataIntensiveDatabase_6.publish.sql ",
+              "DocumentMoniker": "C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_6.publish.sql",
+              "RelativeDocumentMoniker": "DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_6.publish.sql",
+              "ToolTip": "DataIntensiveDatabase_6.publish.sql ",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-09-22T11:08:39.389Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DataIntensiveDatabase_5.publish.sql ",
+              "DocumentMoniker": "C:\\Dev\\data-intensive-test\\DatabaseProject\\DataIntensiveDatabase\\DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_5.publish.sql",
+              "RelativeDocumentMoniker": "DataIntensiveDatabase\\bin\\Debug\\DataIntensiveDatabase_5.publish.sql",
+              "ToolTip": "DataIntensiveDatabase_5.publish.sql ",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-09-22T11:07:45.28Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{007a3a6b-b5b2-454d-a2bd-cf929f989be2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
