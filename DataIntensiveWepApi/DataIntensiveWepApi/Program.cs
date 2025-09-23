@@ -1,6 +1,31 @@
+using DataIntensiveWepApi;
+using DataIntensiveWepApi.Models;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// Add AutoMapper
+builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfile));
+
 // Add services to the container.
+
+var conStringOne = builder.Configuration.GetConnectionString("DbOneConnection") ??
+     throw new InvalidOperationException("Connection string 'DbOneConnection'" +
+    " not found.");
+
+var conStringTwo = builder.Configuration.GetConnectionString("DbTwoConnection") ??
+     throw new InvalidOperationException("Connection string 'DbTwoConnection'" +
+    " not found.");
+
+builder.Services.AddDbContext<DataIntensiveDatabase1Context>(option => option.UseSqlServer(conStringOne));
+
+builder.Services.AddDbContext<DataIntensiveDatabase1Context>(option => option.UseSqlServer(conStringTwo));
+
+//Configure CORS
+builder.Services.AddCors(options => options.AddPolicy("AllowAnyPolicy",
+    builder => { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
