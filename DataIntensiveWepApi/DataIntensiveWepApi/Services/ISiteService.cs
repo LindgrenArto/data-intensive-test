@@ -2,8 +2,8 @@
 
 namespace DataIntensiveWepApi.Services
 {
-    public interface ICustomerService
+    public interface ISiteService
     {
-        List<CustomerDTO> GetCustomers(int db);
+        List<SiteDTO> GetSites(int db);
     }
 }

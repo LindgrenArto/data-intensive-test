@@ -1,4 +1,4 @@
-﻿using DataIntensiveWepApi.Models;
+﻿using DataIntensiveWepApi.DTOModels;
 using DataIntensiveWepApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +21,7 @@ namespace DataIntensiveWepApi.Controllers
 
             try
             {
-                List<Customer> customers = _customerService.GetCustomers(db);
+                List<CustomerDTO> customers = _customerService.GetCustomers(db);
 
                 return Ok(customers);
             }

@@ -2,8 +2,8 @@
 
 namespace DataIntensiveWepApi.Services
 {
-    public interface ICustomerService
+    public interface IDeviceService
     {
-        List<CustomerDTO> GetCustomers(int db);
+        List<DeviceDTO> GetDevices(int db);
     }
 }

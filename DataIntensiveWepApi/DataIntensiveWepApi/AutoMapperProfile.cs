@@ -1,9 +1,27 @@
 ﻿using AutoMapper;
+using DataIntensiveWepApi.DTOModels;
+using DataIntensiveWepApi.Models;
 
 namespace DataIntensiveWepApi
 {
     public class AutoMapperProfile: Profile
     {
-        public AutoMapperProfile() { }
+        public AutoMapperProfile() {
+
+            CreateMap<Customer, CustomerDTO>()
+                   .ReverseMap();
+
+            CreateMap<Site, SiteDTO>()
+                .ReverseMap();
+
+            CreateMap<Device, DeviceDTO>()
+                .ReverseMap();
+
+            CreateMap<Measurement, MeasurementDTO>()
+                .ReverseMap();
+
+            CreateMap<User, UserDTO>()
+                .ReverseMap();
+        }
     }
 }

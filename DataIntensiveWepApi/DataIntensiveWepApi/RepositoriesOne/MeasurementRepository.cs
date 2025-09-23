@@ -2,27 +2,24 @@
 
 namespace DataIntensiveWepApi.RepositoriesOne
 {
-    public class CustomerRepository : ICustomerRepository
+
+    public class MeasurementRepository : IMeasurementRepository
     {
         private readonly DataIntensiveDatabase1Context _context;
 
-        public CustomerRepository(DataIntensiveDatabase1Context context)
+        public MeasurementRepository(DataIntensiveDatabase1Context context)
         {
             _context = context;
         }
 
-        public List<Customer> GetCustomers()
+        public List<Measurement> GetMeasurements()
         {
             try
             {
-                List<Customer> customers = _context.Customers.ToList();
-
-
-                return customers;
+                return _context.Measurements.ToList();
             }
             catch (Exception e)
             {
-
                 throw new Exception("Error", e);
             }
         }

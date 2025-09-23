@@ -1,0 +1,32 @@
+﻿using DataIntensiveWepApi.DTOModels;
+using DataIntensiveWepApi.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DataIntensiveWepApi.Controllers
+{
+    [Route("api/site")]
+    [ApiController]
+    public class SiteController : Controller
+    {
+        private readonly ISiteService _siteService;
+
+        public SiteController(ISiteService siteService)
+        {
+            _siteService = siteService;
+        }
+
+        [HttpGet("{db}")]
+        public IActionResult GetSites([FromRoute] int db)
+        {
+            try
+            {
+                List<SiteDTO> sites = _siteService.GetSites(db);
+                return Ok(sites);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e);
+            }
+        }
+    }
+}

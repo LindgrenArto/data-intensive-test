@@ -29,6 +29,18 @@ builder.Services.AddDbContext<DataIntensiveDatabase2Context>(option => option.Us
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerRepositoryTwo, CustomerRepositoryTwo>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ISiteRepository, SiteRepository>();
+builder.Services.AddScoped<ISiteRepositoryTwo, SiteRepositoryTwo>();
+builder.Services.AddScoped<ISiteService, SiteService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepositoryTwo, UserRepositoryTwo>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
+builder.Services.AddScoped<IDeviceRepositoryTwo, DeviceRepositoryTwo>();
+builder.Services.AddScoped<IDeviceService, DeviceService>();
+builder.Services.AddScoped<IMeasurementRepository, MeasurementRepository>();
+builder.Services.AddScoped<IMeasurementRepositoryTwo, MeasurementRepositoryTwo>();
+builder.Services.AddScoped<IMeasurementService, MeasurementService>();
 
 //Configure CORS
 builder.Services.AddCors(options => options.AddPolicy("AllowAnyPolicy",

@@ -1,4 +1,6 @@
-﻿using DataIntensiveWepApi.Models;
+﻿using AutoMapper;
+using DataIntensiveWepApi.DTOModels;
+using DataIntensiveWepApi.Models;
 using DataIntensiveWepApi.RepositoriesOne;
 
 namespace DataIntensiveWepApi.Services
@@ -8,25 +10,27 @@ namespace DataIntensiveWepApi.Services
 
         private readonly ICustomerRepository _customerRepositoryOne;
         private readonly ICustomerRepository _customerRepositoryTwo;
+        private readonly IMapper _mapper;
 
-        public CustomerService(ICustomerRepository customerRepositoryOne, ICustomerRepository customerRepositoryTwo)
+        public CustomerService(ICustomerRepository customerRepositoryOne, ICustomerRepository customerRepositoryTwo, IMapper mapper)
         {
             _customerRepositoryOne = customerRepositoryOne;
             _customerRepositoryTwo = customerRepositoryTwo;
+            _mapper = mapper;
         }
 
-        public List<Customer> GetCustomers(int db)
+        public List<CustomerDTO> GetCustomers(int db)
         {
             try
             {
-                List<Customer> customers = new List<Customer>();
+                List<CustomerDTO> customers = new List<CustomerDTO>();
                 switch (db)
                 {
                     case 1:
-                        customers = _customerRepositoryOne.GetCustomers();
+                        customers = _mapper.Map<List<CustomerDTO>>(_customerRepositoryOne.GetCustomers());
                         break;
                     case 2:
-                        customers = _customerRepositoryTwo.GetCustomers();
+                        customers = _mapper.Map<List<CustomerDTO>>(_customerRepositoryTwo.GetCustomers());
                         break;
                 }
 
