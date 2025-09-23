@@ -3,6 +3,9 @@ using DataIntensiveWepApi.Models;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using DataIntensiveWepApi.RepositoriesOne;
+using DataIntensiveWepApi.Services;
+using DataIntensiveWepApi.RepositoriesTwo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +24,11 @@ var conStringTwo = builder.Configuration.GetConnectionString("DbTwoConnection") 
 
 builder.Services.AddDbContext<DataIntensiveDatabase1Context>(option => option.UseSqlServer(conStringOne));
 
-builder.Services.AddDbContext<DataIntensiveDatabase1Context>(option => option.UseSqlServer(conStringTwo));
+builder.Services.AddDbContext<DataIntensiveDatabase2Context>(option => option.UseSqlServer(conStringTwo));
+
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerRepositoryTwo, CustomerRepositoryTwo>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 //Configure CORS
 builder.Services.AddCors(options => options.AddPolicy("AllowAnyPolicy",
