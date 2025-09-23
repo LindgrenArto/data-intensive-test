@@ -5,5 +5,5 @@
     [SiteUuid] NVARCHAR(24) NOT NULL, 
 
 	CONSTRAINT [FK_User_UserUuid] FOREIGN KEY ([UserUuid]) REFERENCES [USer]([UserUuid]),
-	CONSTRAINT [FK_Site_User_SiteUuid] FOREIGN KEY ([SiteUuid]) REFERENCES [Site]([SiteUuid])
+	CONSTRAINT [FK_Site_SiteUuid] FOREIGN KEY ([SiteUuid]) REFERENCES [Site]([SiteUuid])
 )

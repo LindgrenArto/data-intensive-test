@@ -8,9 +8,10 @@ BEGIN TRY
     IF NULLIF(@EnvTag,'') IS NULL
         SELECT @EnvTag = UPPER(SUBSTRING(master.dbo.fn_varbintohexstr(HASHBYTES('SHA1', DB_NAME())), 3, 4));
 
-    -------------------------
-    -- Build temp datasets --
-    -------------------------
+    -- small per-environment variation for measurements (0.0 .. 0.9)
+    DECLARE @EnvBump decimal(4,1) = CAST((ABS(CHECKSUM(@EnvTag)) % 10) AS decimal(4,1)) / 10.0;
+
+    -- numbers 1..10
     IF OBJECT_ID('tempdb..#nums') IS NOT NULL DROP TABLE #nums;
     SELECT n INTO #nums
     FROM (VALUES (1),(2),(3),(4),(5),(6),(7),(8),(9),(10)) v(n);
@@ -60,7 +61,7 @@ BEGIN TRY
     INTO #c_mea
     FROM #nums WHERE n <= 5;
 
-
+    -- env-specific 6..10 (UUIDs include @EnvTag)
     IF OBJECT_ID('tempdb..#e_ids') IS NOT NULL DROP TABLE #e_ids;
     SELECT
         n,
@@ -72,29 +73,48 @@ BEGIN TRY
     INTO #e_ids
     FROM #nums WHERE n BETWEEN 6 AND 10;
 
+    -- env-specific human fields (now different per environment)
     IF OBJECT_ID('tempdb..#e_cust') IS NOT NULL DROP TABLE #e_cust;
-    SELECT CustomerUuid = cust, Name = CONCAT('Customer ', n), City = CONCAT('City ', n)
+    SELECT
+        CustomerUuid = cust,
+        Name = CONCAT('Customer ', n, ' - ', @EnvTag),
+        City = CONCAT('City-', @EnvTag, '-', n)
     INTO #e_cust
     FROM #e_ids;
 
     IF OBJECT_ID('tempdb..#e_site') IS NOT NULL DROP TABLE #e_site;
-    SELECT SiteUuid = site, Name = CONCAT('Site ', n), City = CONCAT('City ', n), CustomerUuid = cust
+    SELECT
+        SiteUuid = site,
+        Name = CONCAT('Site ', n, ' - ', @EnvTag),
+        City = CONCAT('Area-', @EnvTag, '-', n),
+        CustomerUuid = cust
     INTO #e_site
     FROM #e_ids;
 
     IF OBJECT_ID('tempdb..#e_dev') IS NOT NULL DROP TABLE #e_dev;
-    SELECT DeviceUuid = dev, Name = CONCAT('Device ', n), Location = CONCAT('Floor ', n), SiteUuid = site
+    SELECT
+        DeviceUuid = dev,
+        Name = CONCAT('Device ', n, ' (', @EnvTag, ')'),
+        Location = CONCAT('Floor ', n, ' / Zone ', @EnvTag),
+        SiteUuid = site
     INTO #e_dev
     FROM #e_ids;
 
     IF OBJECT_ID('tempdb..#e_usr') IS NOT NULL DROP TABLE #e_usr;
-    SELECT UserUuid = usr, Name = CONCAT('User ', n), Location = 'Ops'
+    SELECT
+        UserUuid = usr,
+        Name = CONCAT('User ', n, ' ', @EnvTag),
+        Location = CONCAT('Ops-', @EnvTag)
     INTO #e_usr
     FROM #e_ids;
 
     IF OBJECT_ID('tempdb..#e_mea') IS NOT NULL DROP TABLE #e_mea;
-    SELECT MeasurementUuid = mea, Name = CONCAT('Sensor ', n), Location = CONCAT('Room ', n),
-           DeviceUuid = dev, Measurement = CAST(20.0 + (n*0.3) AS decimal(4,1))
+    SELECT
+        MeasurementUuid = mea,
+        Name = CONCAT('Sensor ', n, ' ', @EnvTag),
+        Location = CONCAT('Room ', n, ' / ', @EnvTag),
+        DeviceUuid = dev,
+        Measurement = CAST(20.0 + (n*0.3) + @EnvBump AS decimal(4,1))
     INTO #e_mea
     FROM #e_ids;
 
@@ -102,7 +122,6 @@ BEGIN TRY
     -- Seed with IF blocks --
     ------------------------
 
-    -- Customers
     IF NOT EXISTS (SELECT 1 FROM dbo.Customer)
     BEGIN
         INSERT dbo.Customer (CustomerUuid, Name, City)
@@ -111,7 +130,6 @@ BEGIN TRY
         SELECT CustomerUuid, Name, City FROM #e_cust;
     END
 
-    -- Sites
     IF NOT EXISTS (SELECT 1 FROM dbo.Site)
     BEGIN
         INSERT dbo.Site (SiteUuid, Name, City, CustomerUuid)
@@ -120,7 +138,6 @@ BEGIN TRY
         SELECT SiteUuid, Name, City, CustomerUuid FROM #e_site;
     END
 
-    -- Devices
     IF NOT EXISTS (SELECT 1 FROM dbo.Device)
     BEGIN
         INSERT dbo.Device (DeviceUuid, Name, Location, SiteUuid)
@@ -129,7 +146,6 @@ BEGIN TRY
         SELECT DeviceUuid, Name, Location, SiteUuid FROM #e_dev;
     END
 
-    -- Users
     IF NOT EXISTS (SELECT 1 FROM dbo.[User])
     BEGIN
         INSERT dbo.[User] (UserUuid, Name, Location)
@@ -138,7 +154,6 @@ BEGIN TRY
         SELECT UserUuid, Name, Location FROM #e_usr;
     END
 
-    -- Measurements
     IF NOT EXISTS (SELECT 1 FROM dbo.Measurement)
     BEGIN
         INSERT dbo.Measurement (MeasurementUuid, Name, Location, DeviceUuid, Measurement)
@@ -147,7 +162,6 @@ BEGIN TRY
         SELECT MeasurementUuid, Name, Location, DeviceUuid, Measurement FROM #e_mea;
     END
 
-    -- SiteUser links: 2 per user (common→common, env→env)
     IF NOT EXISTS (SELECT 1 FROM dbo.SiteUser)
     BEGIN
         ;WITH cu AS (
