@@ -1,0 +1,6 @@
+@DataIntensiveWepApi_HostAddress = http://localhost:5142
+
+GET {{DataIntensiveWepApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
