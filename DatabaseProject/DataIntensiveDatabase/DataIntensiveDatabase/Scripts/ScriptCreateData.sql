@@ -4,24 +4,30 @@ SET XACT_ABORT ON;
 BEGIN TRY
     BEGIN TRAN;
 
+    -- Optional SQLCMD variable (set in publish profile). Falls back to DB name hash if empty.
     DECLARE @EnvTag nvarchar(16) = '$(EnvTag)';
     IF NULLIF(@EnvTag,'') IS NULL
         SELECT @EnvTag = UPPER(SUBSTRING(master.dbo.fn_varbintohexstr(HASHBYTES('SHA1', DB_NAME())), 3, 4));
 
-    -- small per-environment variation for measurements (0.0 .. 0.9)
+    -- Small per-environment numeric bump for measurements (0.0 .. 0.9)
     DECLARE @EnvBump decimal(4,1) = CAST((ABS(CHECKSUM(@EnvTag)) % 10) AS decimal(4,1)) / 10.0;
 
-    -- numbers 1..10
+    -- Choose one of three city sets based on EnvTag (1=Sweden, 2=Norway, 3=Denmark)
+    DECLARE @CitySet int = ((ABS(CHECKSUM(@EnvTag)) % 3) + 1);
+
+    -------------------------
+    -- Build temp datasets --
+    -------------------------
     IF OBJECT_ID('tempdb..#nums') IS NOT NULL DROP TABLE #nums;
     SELECT n INTO #nums
     FROM (VALUES (1),(2),(3),(4),(5),(6),(7),(8),(9),(10)) v(n);
 
-    -- common 1..5
+    -- Common rows 1..5 (identical across DBs)
     IF OBJECT_ID('tempdb..#c_cust') IS NOT NULL DROP TABLE #c_cust;
     SELECT
         CustomerUuid = CONCAT('CUST', REPLICATE('0', 24-4-3), RIGHT('00'+CAST(n AS varchar(3)),3)),
         Name = CONCAT('Customer ', n),
-        City = CHOOSE(n,'Helsinki','Espoo','Vantaa','Tampere','Oulu','Turku','Lahti','Kuopio','Jyväskylä','Joensuu')
+        City = CHOOSE(n, N'Helsinki', N'Espoo', N'Vantaa', N'Tampere', N'Oulu', N'Turku', N'Lahti', N'Kuopio', N'Jyväskylä', N'Joensuu')
     INTO #c_cust
     FROM #nums WHERE n <= 5;
 
@@ -29,7 +35,7 @@ BEGIN TRY
     SELECT
         SiteUuid = CONCAT('SITE', REPLICATE('0', 24-4-3), RIGHT('00'+CAST(n AS varchar(3)),3)),
         Name = CONCAT('Site ', n),
-        City = CHOOSE(n,'Helsinki','Espoo','Vantaa','Tampere','Oulu','Turku','Lahti','Kuopio','Jyväskylä','Joensuu'),
+        City = CHOOSE(n, N'Helsinki', N'Espoo', N'Vantaa', N'Tampere', N'Oulu', N'Turku', N'Lahti', N'Kuopio', N'Jyväskylä', N'Joensuu'),
         CustomerUuid = CONCAT('CUST', REPLICATE('0', 24-4-3), RIGHT('00'+CAST(n AS varchar(3)),3))
     INTO #c_site
     FROM #nums WHERE n <= 5;
@@ -47,7 +53,7 @@ BEGIN TRY
     SELECT
         UserUuid = CONCAT('USR', REPLICATE('0', 24-3-3), RIGHT('00'+CAST(n AS varchar(3)),3)),
         Name = CONCAT('User ', n),
-        Location = 'Ops'
+        Location = N'Ops'
     INTO #c_usr
     FROM #nums WHERE n <= 5;
 
@@ -61,7 +67,7 @@ BEGIN TRY
     INTO #c_mea
     FROM #nums WHERE n <= 5;
 
-    -- env-specific 6..10 (UUIDs include @EnvTag)
+    -- Env-specific rows 6..10 (UUIDs incorporate @EnvTag)
     IF OBJECT_ID('tempdb..#e_ids') IS NOT NULL DROP TABLE #e_ids;
     SELECT
         n,
@@ -73,50 +79,79 @@ BEGIN TRY
     INTO #e_ids
     FROM #nums WHERE n BETWEEN 6 AND 10;
 
-    -- env-specific human fields (now different per environment)
+    -- Materialize env mapping and pick cities per rn (1..5) from the chosen city set
+    IF OBJECT_ID('tempdb..#e') IS NOT NULL DROP TABLE #e;
+    SELECT n, cust, site, dev, usr, mea,
+           ROW_NUMBER() OVER (ORDER BY n) AS rn
+    INTO #e
+    FROM #e_ids;
+
+    IF OBJECT_ID('tempdb..#cities') IS NOT NULL DROP TABLE #cities;
+    ;WITH rows(rn) AS (
+        SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5
+    )
+    SELECT r.rn,
+           CityName = CASE @CitySet
+                        WHEN 1 THEN CHOOSE(r.rn, N'Stockholm', N'Göteborg', N'Malmö', N'Uppsala', N'Västerås')
+                        WHEN 2 THEN CHOOSE(r.rn, N'Oslo', N'Bergen', N'Trondeim', N'Stavanger', N'Drammen')
+                        WHEN 3 THEN CHOOSE(r.rn, N'København', N'Aarhus', N'Odense', N'Aalborg', N'Esbjerg')
+                      END
+    INTO #cities
+    FROM rows r;
+
+    -- Customers (env: city from #cities)
     IF OBJECT_ID('tempdb..#e_cust') IS NOT NULL DROP TABLE #e_cust;
     SELECT
-        CustomerUuid = cust,
-        Name = CONCAT('Customer ', n, ' - ', @EnvTag),
-        City = CONCAT('City-', @EnvTag, '-', n)
+        CustomerUuid = e.cust,
+        Name        = CONCAT('Customer ', e.n, ' - ', @EnvTag),
+        City        = c.CityName
     INTO #e_cust
-    FROM #e_ids;
+    FROM #e e
+    JOIN #cities c ON c.rn = e.rn;
 
+    -- Sites
     IF OBJECT_ID('tempdb..#e_site') IS NOT NULL DROP TABLE #e_site;
     SELECT
-        SiteUuid = site,
-        Name = CONCAT('Site ', n, ' - ', @EnvTag),
-        City = CONCAT('Area-', @EnvTag, '-', n),
-        CustomerUuid = cust
+        SiteUuid     = e.site,
+        Name         = CONCAT('Site ', e.n, ' - ', @EnvTag),
+        City         = c.CityName,
+        CustomerUuid = e.cust
     INTO #e_site
-    FROM #e_ids;
+    FROM #e e
+    JOIN #cities c ON c.rn = e.rn;
 
+    -- Devices (Location includes city)
     IF OBJECT_ID('tempdb..#e_dev') IS NOT NULL DROP TABLE #e_dev;
     SELECT
-        DeviceUuid = dev,
-        Name = CONCAT('Device ', n, ' (', @EnvTag, ')'),
-        Location = CONCAT('Floor ', n, ' / Zone ', @EnvTag),
-        SiteUuid = site
+        DeviceUuid = e.dev,
+        Name      = CONCAT('Device ', e.n, ' (', @EnvTag, ')'),
+        Location  = CONCAT('Zone ', e.rn, N' – ', c.CityName),
+        SiteUuid  = e.site
     INTO #e_dev
-    FROM #e_ids;
+    FROM #e e
+    JOIN #cities c ON c.rn = e.rn;
 
+    -- Users (Location shows env + city)
     IF OBJECT_ID('tempdb..#e_usr') IS NOT NULL DROP TABLE #e_usr;
     SELECT
-        UserUuid = usr,
-        Name = CONCAT('User ', n, ' ', @EnvTag),
-        Location = CONCAT('Ops-', @EnvTag)
+        UserUuid = e.usr,
+        Name     = CONCAT('User ', e.n, ' ', @EnvTag),
+        Location = CONCAT(N'Ops-', @EnvTag, N'-', c.CityName)
     INTO #e_usr
-    FROM #e_ids;
+    FROM #e e
+    JOIN #cities c ON c.rn = e.rn;
 
+    -- Measurements (city + env bump)
     IF OBJECT_ID('tempdb..#e_mea') IS NOT NULL DROP TABLE #e_mea;
     SELECT
-        MeasurementUuid = mea,
-        Name = CONCAT('Sensor ', n, ' ', @EnvTag),
-        Location = CONCAT('Room ', n, ' / ', @EnvTag),
-        DeviceUuid = dev,
-        Measurement = CAST(20.0 + (n*0.3) + @EnvBump AS decimal(4,1))
+        MeasurementUuid = e.mea,
+        Name            = CONCAT('Sensor ', e.n, ' ', @EnvTag),
+        Location        = CONCAT('Room ', e.rn, N' / ', c.CityName),
+        DeviceUuid      = e.dev,
+        Measurement     = CAST(20.0 + (e.n*0.3) + @EnvBump AS decimal(4,1))
     INTO #e_mea
-    FROM #e_ids;
+    FROM #e e
+    JOIN #cities c ON c.rn = e.rn;
 
     ------------------------
     -- Seed with IF blocks --
@@ -173,10 +208,12 @@ BEGIN TRY
         ), es AS (
             SELECT ROW_NUMBER() OVER (ORDER BY (SELECT 1)) rn, SiteUuid FROM #e_site
         ), pairs AS (
+            -- common users: link to site i and next (wrap at 5)
             SELECT cu.UserUuid, cs.SiteUuid FROM cu JOIN cs ON cs.rn = cu.rn
             UNION ALL
             SELECT cu.UserUuid, cs.SiteUuid FROM cu JOIN cs ON cs.rn = CASE WHEN cu.rn = 5 THEN 1 ELSE cu.rn + 1 END
             UNION ALL
+            -- env users: link to site i and next (wrap at 5)
             SELECT eu.UserUuid, es.SiteUuid FROM eu JOIN es ON es.rn = eu.rn
             UNION ALL
             SELECT eu.UserUuid, es.SiteUuid FROM eu JOIN es ON es.rn = CASE WHEN eu.rn = 5 THEN 1 ELSE eu.rn + 1 END
