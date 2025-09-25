@@ -1,0 +1,10 @@
+﻿using DataIntensiveWepApi.ConnectionResolver;
+using DataIntensiveWepApi.Models;
+
+namespace DataIntensiveWepApi.RepositoriesOne
+{
+    public interface IMeasurementRepository
+    {
+        List<Measurement> GetMeasurements(DataStore store);
+    }
+}

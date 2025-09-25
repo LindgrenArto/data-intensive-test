@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
+using DataIntensiveWepApi.ConnectionResolver;
 using DataIntensiveWepApi.DTOModels;
 using DataIntensiveWepApi.RepositoriesOne;
-using DataIntensiveWepApi.RepositoriesTwo;
 
 namespace DataIntensiveWepApi.Services
 {
     public class DeviceService : IDeviceService
     {
-        private readonly IDeviceRepository _deviceRepositoryOne;
-        private readonly IDeviceRepositoryTwo _deviceRepositoryTwo;
+        private readonly IDeviceRepository _deviceRepository;
         private readonly IMapper _mapper;
 
-        public DeviceService(IDeviceRepository deviceRepositoryOne, IDeviceRepositoryTwo deviceRepositoryTwo, IMapper mapper)
+        public DeviceService(IDeviceRepository deviceRepositoryOne, IMapper mapper)
         {
-            _deviceRepositoryOne = deviceRepositoryOne;
-            _deviceRepositoryTwo = deviceRepositoryTwo;
+            _deviceRepository = deviceRepositoryOne;
             _mapper = mapper;
         }
 
@@ -26,10 +24,10 @@ namespace DataIntensiveWepApi.Services
                 switch (db)
                 {
                     case 1:
-                        devices = _mapper.Map<List<DeviceDTO>>(_deviceRepositoryOne.GetDevices());
+                        devices = _mapper.Map<List<DeviceDTO>>(_deviceRepository.GetDevices(DataStore.One));
                         break;
                     case 2:
-                        devices = _mapper.Map<List<DeviceDTO>>(_deviceRepositoryTwo.GetDevices());
+                        devices = _mapper.Map<List<DeviceDTO>>(_deviceRepository.GetDevices(DataStore.Two));
                         break;
                 }
 

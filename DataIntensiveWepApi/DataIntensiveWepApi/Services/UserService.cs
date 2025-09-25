@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
+using DataIntensiveWepApi.ConnectionResolver;
 using DataIntensiveWepApi.DTOModels;
 using DataIntensiveWepApi.RepositoriesOne;
-using DataIntensiveWepApi.RepositoriesTwo;
 
 namespace DataIntensiveWepApi.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepositoryOne;
-        private readonly IUserRepositoryTwo _userRepositoryTwo;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepositoryOne, IUserRepositoryTwo userRepositoryTwo, IMapper mapper)
+        public UserService(IUserRepository userRepository, IMapper mapper)
         {
-            _userRepositoryOne = userRepositoryOne;
-            _userRepositoryTwo = userRepositoryTwo;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
@@ -26,10 +24,10 @@ namespace DataIntensiveWepApi.Services
                 switch (db)
                 {
                     case 1:
-                        users = _mapper.Map<List<UserDTO>>(_userRepositoryOne.GetUsers());
+                        users = _mapper.Map<List<UserDTO>>(_userRepository.GetUsers(DataStore.One));
                         break;
                     case 2:
-                        users = _mapper.Map<List<UserDTO>>(_userRepositoryTwo.GetUsers());
+                        users = _mapper.Map<List<UserDTO>>(_userRepository.GetUsers(DataStore.Two));
                         break;
                 }
 

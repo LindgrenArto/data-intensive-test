@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataIntensiveWepApi.Models;
 
-public partial class DataIntensiveDatabase1Context : DbContext
+public partial class DataIntensiveDatabaseContext : DbContext
 {
-    public DataIntensiveDatabase1Context(DbContextOptions<DataIntensiveDatabase1Context> options)
+    public DataIntensiveDatabaseContext(DbContextOptions<DataIntensiveDatabaseContext> options)
         : base(options)
     {
     }

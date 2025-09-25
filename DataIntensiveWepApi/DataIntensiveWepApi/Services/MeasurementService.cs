@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
+using DataIntensiveWepApi.ConnectionResolver;
 using DataIntensiveWepApi.DTOModels;
 using DataIntensiveWepApi.RepositoriesOne;
-using DataIntensiveWepApi.RepositoriesTwo;
 
 namespace DataIntensiveWepApi.Services
 {
     public class MeasurementService : IMeasurementService
     {
-        private readonly IMeasurementRepository _measurementRepositoryOne;
-        private readonly IMeasurementRepositoryTwo _measurementRepositoryTwo;
+        private readonly IMeasurementRepository _measurementRepository;
         private readonly IMapper _mapper;
 
-        public MeasurementService(IMeasurementRepository measurementRepositoryOne, IMeasurementRepositoryTwo measurementRepositoryTwo, IMapper mapper)
+        public MeasurementService(IMeasurementRepository measurementRepository, IMapper mapper)
         {
-            _measurementRepositoryOne = measurementRepositoryOne;
-            _measurementRepositoryTwo = measurementRepositoryTwo;
+            _measurementRepository = measurementRepository;
             _mapper = mapper;
         }
 
@@ -26,10 +24,10 @@ namespace DataIntensiveWepApi.Services
                 switch (db)
                 {
                     case 1:
-                        measurements = _mapper.Map<List<MeasurementDTO>>(_measurementRepositoryOne.GetMeasurements());
+                        measurements = _mapper.Map<List<MeasurementDTO>>(_measurementRepository.GetMeasurements(DataStore.One));
                         break;
                     case 2:
-                        measurements = _mapper.Map<List<MeasurementDTO>>(_measurementRepositoryTwo.GetMeasurements());
+                        measurements = _mapper.Map<List<MeasurementDTO>>(_measurementRepository.GetMeasurements(DataStore.Two));
                         break;
                 }
 
