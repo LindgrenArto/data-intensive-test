@@ -18,22 +18,12 @@ namespace DataIntensiveWepApi.Services
             _mapper = mapper;
         }
 
-        public List<CustomerDTO> GetCustomers(int db)
+        public List<CustomerDTO> GetCustomers(DataStore store)
         {
             try
             {
-                List<CustomerDTO> customers = new List<CustomerDTO>();
-                switch (db)
-                {
-                    case 1:
-                        customers = _mapper.Map<List<CustomerDTO>>(_customerRepository.GetCustomers(DataStore.One));
-                        break;
-                    case 2:
-                        customers = _mapper.Map<List<CustomerDTO>>(_customerRepository.GetCustomers(DataStore.Two));
-                        break;
-                }
-
-               return customers;
+                var customers = _mapper.Map<List<CustomerDTO>>(_customerRepository.GetCustomers(store));
+                return customers;
             }
             catch (Exception e)
             {

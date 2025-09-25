@@ -1,4 +1,5 @@
-﻿using DataIntensiveWepApi.DTOModels;
+﻿using DataIntensiveWepApi.ConnectionResolver;
+using DataIntensiveWepApi.DTOModels;
 using DataIntensiveWepApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,11 @@ namespace DataIntensiveWepApi.Controllers
         {
             try
             {
-                List<UserDTO> users = _userService.GetUsers(db);
+                if (!Enum.IsDefined(typeof(DataStore), db))
+                    return BadRequest("Unknown database.");
+
+                var store = (DataStore)db;
+                List<UserDTO> users = _userService.GetUsers(store);
                 return Ok(users);
             }
             catch (Exception e)

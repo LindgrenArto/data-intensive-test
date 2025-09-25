@@ -1,9 +1,10 @@
-﻿using DataIntensiveWepApi.DTOModels;
+﻿using DataIntensiveWepApi.ConnectionResolver;
+using DataIntensiveWepApi.DTOModels;
 
 namespace DataIntensiveWepApi.Services
 {
     public interface IUserService
     {
-        List<UserDTO> GetUsers(int db);
+        List<UserDTO> GetUsers(DataStore store);
     }
 }

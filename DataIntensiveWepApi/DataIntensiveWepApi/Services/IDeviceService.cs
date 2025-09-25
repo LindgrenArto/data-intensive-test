@@ -1,9 +1,10 @@
-﻿using DataIntensiveWepApi.DTOModels;
+﻿using DataIntensiveWepApi.ConnectionResolver;
+using DataIntensiveWepApi.DTOModels;
 
 namespace DataIntensiveWepApi.Services
 {
     public interface IDeviceService
     {
-        List<DeviceDTO> GetDevices(int db);
+        List<DeviceDTO> GetDevices(DataStore store);
     }
 }

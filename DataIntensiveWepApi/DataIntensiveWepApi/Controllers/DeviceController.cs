@@ -1,4 +1,5 @@
-﻿using DataIntensiveWepApi.DTOModels;
+﻿using DataIntensiveWepApi.ConnectionResolver;
+using DataIntensiveWepApi.DTOModels;
 using DataIntensiveWepApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,11 @@ namespace DataIntensiveWepApi.Controllers
         {
             try
             {
-                List<DeviceDTO> devices = _deviceService.GetDevices(db);
+                if (!Enum.IsDefined(typeof(DataStore), db))
+                    return BadRequest("Unknown database.");
+
+                var store = (DataStore)db;
+                List<DeviceDTO> devices = _deviceService.GetDevices(store);
                 return Ok(devices);
             }
             catch (Exception e)

@@ -16,21 +16,12 @@ namespace DataIntensiveWepApi.Services
             _mapper = mapper;
         }
 
-        public List<DeviceDTO> GetDevices(int db)
+        public List<DeviceDTO> GetDevices(DataStore store)
         {
             try
             {
-                List<DeviceDTO> devices = new List<DeviceDTO>();
-                switch (db)
-                {
-                    case 1:
-                        devices = _mapper.Map<List<DeviceDTO>>(_deviceRepository.GetDevices(DataStore.One));
-                        break;
-                    case 2:
-                        devices = _mapper.Map<List<DeviceDTO>>(_deviceRepository.GetDevices(DataStore.Two));
-                        break;
-                }
-
+                List<DeviceDTO> devices = _mapper.Map<List<DeviceDTO>>(_deviceRepository.GetDevices(store));
+ 
                 return devices;
             }
             catch (Exception e)

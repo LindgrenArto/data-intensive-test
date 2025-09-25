@@ -1,9 +1,10 @@
-﻿using DataIntensiveWepApi.DTOModels;
+﻿using DataIntensiveWepApi.ConnectionResolver;
+using DataIntensiveWepApi.DTOModels;
 
 namespace DataIntensiveWepApi.Services
 {
     public interface ISiteService
     {
-        List<SiteDTO> GetSites(int db);
+        List<SiteDTO> GetSites(DataStore store);
     }
 }

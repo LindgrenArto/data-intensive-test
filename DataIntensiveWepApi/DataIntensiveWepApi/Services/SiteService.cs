@@ -19,21 +19,12 @@ namespace DataIntensiveWepApi.Services
             _mapper = mapper;
         }
 
-        public List<SiteDTO> GetSites(int db)
+        public List<SiteDTO> GetSites(DataStore store)
         {
             try
             {
-                List<SiteDTO> siteDTO = new List<SiteDTO>();
-                switch (db)
-                {
-                    case 1:
-                       siteDTO = _mapper.Map<List<SiteDTO>>(_siteRepository.GetSites(DataStore.One));
-                        break;
-                    case 2:
-                        siteDTO = _mapper.Map<List<SiteDTO>>(_siteRepository.GetSites(DataStore.Two));
-                        break;
-                }
-
+                List<SiteDTO> siteDTO = _mapper.Map<List<SiteDTO>>(_siteRepository.GetSites(store));
+   
                 return siteDTO;
             }
             catch (Exception e)

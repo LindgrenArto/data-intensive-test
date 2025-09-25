@@ -16,20 +16,11 @@ namespace DataIntensiveWepApi.Services
             _mapper = mapper;
         }
 
-        public List<MeasurementDTO> GetMeasurements(int db)
+        public List<MeasurementDTO> GetMeasurements(DataStore store)
         {
             try
             {
-                List<MeasurementDTO> measurements = new List<MeasurementDTO>();
-                switch (db)
-                {
-                    case 1:
-                        measurements = _mapper.Map<List<MeasurementDTO>>(_measurementRepository.GetMeasurements(DataStore.One));
-                        break;
-                    case 2:
-                        measurements = _mapper.Map<List<MeasurementDTO>>(_measurementRepository.GetMeasurements(DataStore.Two));
-                        break;
-                }
+                List<MeasurementDTO> measurements = _mapper.Map<List<MeasurementDTO>>(_measurementRepository.GetMeasurements(store));
 
                 return measurements;
             }
