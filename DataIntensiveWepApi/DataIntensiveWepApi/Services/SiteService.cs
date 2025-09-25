@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using DataIntensiveWepApi.DTOModels;
+using DataIntensiveWepApi.Models;
 using DataIntensiveWepApi.RepositoriesOne;
 using DataIntensiveWepApi.RepositoriesTwo;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DataIntensiveWepApi.Services
 {
@@ -22,18 +25,18 @@ namespace DataIntensiveWepApi.Services
         {
             try
             {
-                List<SiteDTO> sites = new List<SiteDTO>();
+                List<SiteDTO> siteDTO = new List<SiteDTO>();
                 switch (db)
                 {
                     case 1:
-                        sites = _mapper.Map<List<SiteDTO>>(_siteRepositoryOne.GetSites());
+                       siteDTO = _mapper.Map<List<SiteDTO>>(_siteRepositoryOne.GetSites());
                         break;
                     case 2:
-                        sites = _mapper.Map<List<SiteDTO>>(_siteRepositoryTwo.GetSites());
+                        siteDTO = _mapper.Map<List<SiteDTO>>(_siteRepositoryTwo.GetSites());
                         break;
                 }
 
-                return sites;
+                return siteDTO;
             }
             catch (Exception e)
             {

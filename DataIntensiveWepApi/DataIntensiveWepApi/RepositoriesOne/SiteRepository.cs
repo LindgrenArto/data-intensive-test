@@ -1,4 +1,6 @@
-﻿using DataIntensiveWepApi.Models;
+﻿using DataIntensiveWepApi.DTOModels;
+using DataIntensiveWepApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataIntensiveWepApi.RepositoriesOne
 {
@@ -15,7 +17,11 @@ namespace DataIntensiveWepApi.RepositoriesOne
         {
             try
             {
-                return _context.Sites.ToList();
+                var sites = _context.Sites
+                        .Include(s => s.SiteUsers)
+                        .ThenInclude(su => su.UserUu)
+                        .ToList();
+                return sites;
             }
             catch (Exception e)
             {
