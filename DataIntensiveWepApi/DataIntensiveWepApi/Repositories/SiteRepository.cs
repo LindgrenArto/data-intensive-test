@@ -39,5 +39,45 @@ namespace DataIntensiveWepApi.RepositoriesOne
                 throw new Exception("Error", e);
             }
         }
+
+        public Site GetSiteByUuid(DataStore store, string uuid)
+        {
+            try
+            {
+                using var db = Create(store);
+
+                Site site = db.Sites.Where(s => s.SiteUuid == uuid).Single();
+
+                return site;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error fetching site", e);
+            }
+        }
+
+        public Site UpdateSite(DataStore store, Site incoming)
+        {
+            {
+                try
+                {
+                    using var db = Create(store);
+
+                    var original = db.Sites.Where(s => s.SiteUuid == incoming.SiteUuid).FirstOrDefault();
+
+                    original.Name = incoming.Name;
+                    original.City = incoming.City;
+
+                    db.Sites.Update(original);
+                    db.SaveChanges();
+
+                    return original;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error updating site", e);
+                }
+            }
+        }
     }
 }

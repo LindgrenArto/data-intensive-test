@@ -16,6 +16,9 @@ namespace DataIntensiveWepApi
                     opt => opt.MapFrom(s => s.SiteUsers.Select(su => su.UserUu)))
                 .ReverseMap();
 
+            CreateMap<Site, UpdateSiteDTO>()
+                .ReverseMap();
+
             CreateMap<Device, DeviceDTO>()
                 .ReverseMap();
 
