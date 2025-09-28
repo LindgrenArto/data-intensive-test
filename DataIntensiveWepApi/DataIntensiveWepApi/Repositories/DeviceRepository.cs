@@ -1,6 +1,8 @@
 ﻿using DataIntensiveWepApi.ConnectionResolver;
 using DataIntensiveWepApi.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Text;
 
 namespace DataIntensiveWepApi.RepositoriesOne
 {
@@ -31,6 +33,44 @@ namespace DataIntensiveWepApi.RepositoriesOne
             catch (Exception e)
             {
                 throw new Exception("Error", e);
+            }
+        }
+
+        public Device GetDeviceByUuid(DataStore store, string uuid)
+        {
+            try
+            {
+                using var db = Create(store);
+
+                Device device = db.Devices.Where(c => c.DeviceUuid == uuid).Single();
+
+                return device;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error fetching device", e);
+            }
+        }
+
+        public Device UpdateDevice(DataStore store, Device incoming)
+        {
+            try
+            {
+                using var db = Create(store);
+
+                var original = db.Devices.Where(c => c.DeviceUuid == incoming.DeviceUuid).Single();
+
+                original.Name = incoming.Name;
+                original.Location = incoming.Location;
+
+                db.Devices.Update(original);
+                db.SaveChanges();
+
+                return original;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error updating device", e);
             }
         }
     }

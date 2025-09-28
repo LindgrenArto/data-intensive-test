@@ -6,6 +6,8 @@ namespace DataIntensiveWepApi.Services
     public interface IMeasurementService
     {
         List<MeasurementDTO> GetMeasurements(DataStore store);
-        //MeasurementDTO UpdateMeasurement(DataStore store, MeasurementDTO measurementDTO);
+
+        MeasurementDTO GetMeasurementByUuid(DataStore store, string uuid);
+        MeasurementDTO UpdateMeasurement(DataStore store, MeasurementDTO measurementDTO);
     }
 }

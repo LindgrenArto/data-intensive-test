@@ -6,6 +6,7 @@ namespace DataIntensiveWepApi.Services
     public interface IUserService
     {
         List<UserDTO> GetUsers(DataStore store);
-        //UserDTO UpdateUser(DataStore store, UserDTO userDTO);
+        UserDTO GetUserByUuid(DataStore store, string uuid);
+        UserDTO UpdateUser(DataStore store, UserDTO userDTO);
     }
 }

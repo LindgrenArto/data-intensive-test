@@ -60,7 +60,7 @@ namespace DataIntensiveWepApi.Repositories
                 {
                     using var db = Create(store);
 
-                    var original = db.Customers.Where(c => c.CustomerUuid == incoming.CustomerUuid).FirstOrDefault();
+                    var original = db.Customers.Where(c => c.CustomerUuid == incoming.CustomerUuid).Single();
 
                     original.Name = incoming.Name;
                     original.City = incoming.City;

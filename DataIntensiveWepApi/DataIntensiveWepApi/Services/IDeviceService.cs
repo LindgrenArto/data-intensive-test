@@ -7,6 +7,8 @@ namespace DataIntensiveWepApi.Services
     {
         List<DeviceDTO> GetDevices(DataStore store);
 
-       // DeviceDTO UpdateDevice(DataStore store, DeviceDTO device);
+        DeviceDTO GetDeviceByUuid(DataStore store, string uuid);
+
+        DeviceDTO UpdateDevice(DataStore store, DeviceDTO device);
     }
 }
