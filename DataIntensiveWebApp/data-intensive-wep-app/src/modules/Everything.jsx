@@ -122,7 +122,7 @@ useEffect(() => {
 
   return (
     <div style={{ padding: 24, maxWidth: 1100, margin: "0 auto", fontFamily: "system-ui" }}>
-      <h1>Data Explorer (client-side mapping)</h1>
+      <h1>Data Explorer</h1>
 
       <label>
         DB:&nbsp;
