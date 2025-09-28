@@ -269,7 +269,7 @@ function Editor({ editing, setEditing, onSave }) {
   const fields = {
     customer: ["name", "city"],
     site: ["name", "city", "customerUuid"],
-    device: ["name", "type", "siteUuid"],
+    device: ["name", "location", "siteUuid"],
     measurement: ["name", "measurement1", "location", "deviceUuid"],
     user: ["name", "location", "siteUuid"],
   }[kind];
