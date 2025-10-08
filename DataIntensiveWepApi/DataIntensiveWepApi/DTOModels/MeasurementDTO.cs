@@ -7,5 +7,7 @@
         public string Location { get; set; }
         public double? Measurement1 { get; set; }
 
+        public string DeviceUuid { get; set; }
+
     }
 }

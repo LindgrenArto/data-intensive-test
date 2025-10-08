@@ -28,7 +28,7 @@ namespace DataIntensiveWepApi.RepositoriesOne
             try
             {
                 var db = Create(store);
-                return db.Measurements.ToList();
+                return db.Measurements.Include(d => d.DeviceUu).ToList();
             }
             catch (Exception e)
             {

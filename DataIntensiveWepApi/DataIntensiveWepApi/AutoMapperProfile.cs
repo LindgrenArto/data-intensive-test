@@ -23,6 +23,7 @@ namespace DataIntensiveWepApi
                 .ReverseMap();
 
             CreateMap<Measurement, MeasurementDTO>()
+                .ForMember(d => d.DeviceUuid, opt => opt.MapFrom(d => d.DeviceUu.DeviceUuid))
                 .ReverseMap();
 
             CreateMap<User, UserDTO>()
