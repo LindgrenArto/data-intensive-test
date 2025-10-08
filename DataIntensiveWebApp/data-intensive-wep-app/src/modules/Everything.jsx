@@ -304,7 +304,14 @@ function Editor({ editing, setEditing, onSave }) {
       {fields.map(f => (
         <label key={f} style={{ display: "flex", gap: 8 }}>
           <span style={{ width: 140 }}>{f}</span>
-          <input value={data[f] ?? ""} onChange={(e) => onChange(f, e.target.value)} />
+          <input
+             required
+            pattern=".*\S.*"       
+            title="This field cannot be empty"
+            value={data[f] ?? ""}
+            onChange={(e) => onChange(f, e.target.value)}
+            onBlur={(e) => onChange(f, e.target.value.trim())}
+          />
         </label>
       ))}
       <div style={{ display: "flex", gap: 8 }}>
