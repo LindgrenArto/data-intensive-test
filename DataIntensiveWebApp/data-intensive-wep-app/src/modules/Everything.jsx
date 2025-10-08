@@ -86,10 +86,33 @@ useEffect(() => {
   const devicesForSite   = selSite ? (devicesBySite.get(selSite.siteUuid) || []) : [];
   const measuresForDev   = selDevice ? (measuresByDev.get(selDevice.deviceUuid) || []) : [];
 
+
+  // helpers
+const isBlank = (v) => !v || String(v).trim().length === 0;
+const hasKeys = (obj, keys) => keys.every(k => obj.hasOwnProperty(k) && !isBlank(obj[k]));
+const cleanStrings = (o) =>
+  Object.fromEntries(Object.entries(o).map(([k, v]) => [k, typeof v === "string" ? v.trim() : v]));
+
+const requiredByKind = {
+  customer: [ "name", "city"],
+  site: ["name", "city", "customerUuid"],
+  device: ["name", "location", "siteUuid"],
+  measurement: ["name", "measurement1", "location", "deviceUuid"],
+  user: [ "name", "location", "siteUuid"],
+};
+
   // Save handler
   const onSave = async () => {
     if (!editing) return;
     const { kind, data } = editing;
+
+  const payload = cleanStrings(data);
+  const required = requiredByKind[kind] || [];
+  if (!hasKeys(payload, required)) {
+    setErr(`Please fill all required ${kind} fields: ${required.join(", ")}`);
+    return;
+  }
+
     const map = {
       customer: `${API}/api/customer/${db}`,
       site:     `${API}/api/site/${db}`,
